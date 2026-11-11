@@ -48,13 +48,14 @@ async function collect(listPromise) {
 
 const queryAll = (info) => collect(messenger.messages.query(info));
 
-/** "Re: Fwd: RE[2]: Hello" -> "hello" */
+/** "Re: Fwd: RE[2]: Hello  World" -> "Hello  World" (case kept, for messages.query) */
+function stripSubjectPrefixes(subject) {
+  return (subject || "").replace(/^\s*((re|fw|fwd|rv|res|aw|wg|sv|vs|tr|enc|antw)(\[\d+\])?\s*:\s*)+/i, "").trim();
+}
+
+/** "Re: Fwd: RE[2]: Hello  World" -> "hello world" (comparison key) */
 function normalizeSubject(subject) {
-  return (subject || "")
-    .replace(/^\s*((re|fw|fwd|rv|res|aw|wg|sv|vs|tr|enc|antw)(\[\d+\])?\s*:\s*)+/i, "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
+  return stripSubjectPrefixes(subject).replace(/\s+/g, " ").toLowerCase();
 }
 
 /** Extracts the "<id@host>" tokens of a header value, without brackets. */
@@ -148,9 +149,12 @@ messenger.compose.onAfterSend.addListener(async (tab, sendInfo) => {
  * @param {object} opts
  * @param {Date}   [opts.fromDate]  Only consider sent messages since this date.
  * @param {Set}    [opts.subjects]  Only consider sent messages with these normalized subjects.
+ * @param {Set}    [opts.searchTerms] Original-case subjects (prefixes stripped) used to
+ *                                  search the Sent folders; messages.query matches
+ *                                  subjects case-sensitively.
  * @returns {Promise<number>} number of messages copied.
  */
-async function backfillFolder(folder, { fromDate, subjects } = {}) {
+async function backfillFolder(folder, { fromDate, subjects, searchTerms } = {}) {
   const inFolder = await queryAll({ folderId: folder.id });
   const known = new Set(inFolder.map((m) => m.headerMessageId));
   const wanted = subjects || new Set(inFolder.map((m) => normalizeSubject(m.subject)));
@@ -160,10 +164,11 @@ async function backfillFolder(folder, { fromDate, subjects } = {}) {
   if (!sentFolderIds.length || !wanted.size) return 0;
 
   let candidates;
-  if (subjects) {
+  if (searchTerms) {
     // Narrow search per subject: cheap, and needs no date limit.
     const byId = new Map();
-    for (const s of subjects) {
+    for (const s of searchTerms) {
+      if (!s) continue;
       for (const m of await queryAll({ folderId: sentFolderIds, subject: s })) byId.set(m.id, m);
     }
     candidates = [...byId.values()];
@@ -221,16 +226,17 @@ async function onThreadMenu(info) {
   const groups = new Map();
   for (const m of selected) {
     if (!isEligibleFolder(m.folder)) continue;
-    const g = groups.get(m.folder.id) || { folder: m.folder, subjects: new Set() };
+    const g = groups.get(m.folder.id) || { folder: m.folder, subjects: new Set(), searchTerms: new Set() };
     g.subjects.add(normalizeSubject(m.subject));
+    g.searchTerms.add(stripSubjectPrefixes(m.subject));
     groups.set(m.folder.id, g);
   }
   if (!groups.size) {
     await notify(t("notifyIneligible"));
     return;
   }
-  for (const { folder, subjects } of groups.values()) {
-    const count = await backfillFolder(folder, { subjects });
+  for (const { folder, subjects, searchTerms } of groups.values()) {
+    const count = await backfillFolder(folder, { subjects, searchTerms });
     await reportResult(folder, count);
   }
 }
