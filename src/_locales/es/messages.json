@@ -1,0 +1,18 @@
+{
+  "extensionName": { "message": "Enviados en hilos" },
+  "extensionDescription": { "message": "Muestra tus respuestas enviadas dentro de los hilos de conversación de la carpeta donde vive la conversación (p. ej. la Bandeja de entrada), no solo en Enviados." },
+  "menuThread": { "message": "Añadir mis respuestas enviadas a este hilo" },
+  "menuFolder": { "message": "Añadir mis respuestas enviadas a los hilos de esta carpeta" },
+  "notifyTitle": { "message": "Enviados en hilos" },
+  "notifyDone": { "message": "$COUNT$ mensaje(s) enviado(s) añadido(s) a «$FOLDER$».", "placeholders": { "count": { "content": "$1" }, "folder": { "content": "$2" } } },
+  "notifyNone": { "message": "No hay mensajes enviados nuevos para «$FOLDER$».", "placeholders": { "folder": { "content": "$1" } } },
+  "notifyBusy": { "message": "Ya estoy trabajando; espera a que termine la tarea actual." },
+  "notifyIneligible": { "message": "Esta carpeta no puede recibir copias de enviados (es Enviados, Borradores, Papelera, Spam, unificada o virtual)." },
+  "notifyError": { "message": "Error: $ERR$", "placeholders": { "err": { "content": "$1" } } },
+  "notifyWorking": { "message": "Buscando tus respuestas enviadas para «$FOLDER$»…", "placeholders": { "folder": { "content": "$1" } } },
+  "optTitle": { "message": "Enviados en hilos – opciones" },
+  "optAuto": { "message": "Al enviar una respuesta, copiarla también a la(s) carpeta(s) donde está el mensaje al que respondo" },
+  "optDays": { "message": "Al añadir enviados a una carpeta entera, revisar los enviados de los últimos N días:" },
+  "optSaved": { "message": "Guardado" },
+  "optHelp": { "message": "El original se queda en Enviados; se coloca una copia junto a la conversación para que Thunderbird la incluya en el hilo. Para conversaciones antiguas, clic derecho en un mensaje («Añadir mis respuestas enviadas a este hilo») o en una carpeta («Añadir mis respuestas enviadas a los hilos de esta carpeta»)." }
+}

@@ -1,0 +1,18 @@
+{
+  "extensionName": { "message": "Sent in Threads" },
+  "extensionDescription": { "message": "Shows your sent replies inside the conversation threads of the folder where the conversation lives (e.g. the Inbox), not only in the Sent folder." },
+  "menuThread": { "message": "Add my sent replies to this thread" },
+  "menuFolder": { "message": "Add my sent replies to this folder's threads" },
+  "notifyTitle": { "message": "Sent in Threads" },
+  "notifyDone": { "message": "$COUNT$ sent message(s) added to \"$FOLDER$\".", "placeholders": { "count": { "content": "$1" }, "folder": { "content": "$2" } } },
+  "notifyNone": { "message": "No new sent messages found for \"$FOLDER$\".", "placeholders": { "folder": { "content": "$1" } } },
+  "notifyBusy": { "message": "Already working, please wait until the current task finishes." },
+  "notifyIneligible": { "message": "This folder can't hold copies of sent messages (it is a Sent, Drafts, Trash, Junk, unified or virtual folder)." },
+  "notifyError": { "message": "Error: $ERR$", "placeholders": { "err": { "content": "$1" } } },
+  "notifyWorking": { "message": "Looking for your sent replies in \"$FOLDER$\"…", "placeholders": { "folder": { "content": "$1" } } },
+  "optTitle": { "message": "Sent in Threads – options" },
+  "optAuto": { "message": "When I send a reply, also copy it to the folder(s) holding the message I replied to" },
+  "optDays": { "message": "When adding sent replies to a whole folder, look at sent messages from the last N days:" },
+  "optSaved": { "message": "Saved" },
+  "optHelp": { "message": "The original stays in your Sent folder; a copy is placed next to the conversation so Thunderbird threads it. Right-click a message (\"Add my sent replies to this thread\") or a folder (\"Add my sent replies to this folder's threads\") to fix older conversations." }
+}
